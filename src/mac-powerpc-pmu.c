@@ -16,6 +16,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>		/* atoi, strtol */
 #include <string.h>     /* strstr, strtok */
 #include <strings.h>    /* strcasecmp */
 #include <stdarg.h>     /* va_list, va_start, va_end */
@@ -25,6 +26,7 @@
 #include <sys/types.h>	/* stat */
 #include <sys/stat.h>	/* stat */
 #include <unistd.h>		/* stat */
+#include <ctype.h>		/* isspace */
 #include <linux/pmu.h>
 
 #include "mac-powerpc-pmu.h"
@@ -240,7 +242,7 @@ char *format_pmu_info(pmu_info_t *i, char *formatted_output, size_t capacity)
 
 char *format_pmu_battery_status(pmu_battery_status_t *s, char *formatted_output, size_t capacity)
 {
-	snprintf(formatted_output, capacity, "%s = %d\n%s = %d\n%s = %d\n%s = %d\n%s = %d\n%s = %d",
+	snprintf(formatted_output, capacity, "%s = %ld\n%s = %d\n%s = %d\n%s = %d\n%s = %d\n%s = %d",
 			PMU_FLAGS_KEY, s->flags,
 			PMU_CHARGE_KEY, s->charge,
 			PMU_MAX_CHARGE_KEY,s->max_charge,

@@ -78,13 +78,11 @@ gboolean update_icon(gpointer data)
 {
     pmu_info_t pmu_info;
 	pmu_battery_status_t battery;
-	int percent_charge;
     GtkStatusIcon *battery_icon;
 	
     battery_icon = (GtkStatusIcon *) data;
     read_pmu_info(&pmu_info);
 	read_pmu_battery_status(0, &battery);
-	percent_charge = (float) battery.charge / battery.max_charge * 100;
 	gtk_status_icon_set_from_file(battery_icon, build_icon_file_name(&battery));
     gtk_status_icon_set_tooltip_text(battery_icon, build_tooltip(&pmu_info, &battery));
 	return TRUE;
@@ -120,7 +118,6 @@ char *build_tooltip(pmu_info_t *battery_info, pmu_battery_status_t *battery_stat
 char *build_icon_file_name(pmu_battery_status_t *battery)
 {
 	static char file_name[MAX_STR_LEN+1];
-    bool is_charging;
     int charge_percent;
 
 	strcpy(file_name, BATTERY_ICON_DIR);
