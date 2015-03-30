@@ -5,25 +5,24 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.base.2112378282" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.2112378282" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.2112378282.540783476" name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.base.338956094" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.151818551" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-							<builder id="cdt.managedbuild.target.gnu.builder.base.2035396527" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1661531659" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.311709056" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.856858844" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
-								<option id="gnu.c.compiler.option.misc.other.827279842" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -pthread" valueType="string"/>
-								<option id="gnu.c.compiler.option.include.paths.280844348" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.base.511438845" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.99226642" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
+							<builder buildPath="${workspace_loc:/mac-battery-applet/Default}" id="cdt.managedbuild.target.gnu.builder.base.607036650" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1004404365" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1363707243" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.800816201" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
+								<option id="gnu.c.compiler.option.include.paths.115754785" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/gtk-3.0"/>
 									<listOptionValue builtIn="false" value="/usr/include/pango-1.0"/>
 									<listOptionValue builtIn="false" value="/usr/include/gio-unix-2.0/"/>
@@ -36,10 +35,21 @@
 									<listOptionValue builtIn="false" value="/usr/include/pixman-1"/>
 									<listOptionValue builtIn="false" value="/usr/include/libpng12"/>
 								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1892928242" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.200575885" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1164068111" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base">
-								<option id="gnu.c.link.option.libs.1321650255" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.444273033" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base">
+								<option id="gnu.c.link.option.libs.874762184" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gtk-3"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gdk-3"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="atk-1.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gio-2.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pangocairo-1.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gdk_pixbuf-2.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cairo-gobject"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pango-1.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cairo"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gobject-2.0"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="glib-2.0"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gtk-3"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gdk-3"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="atk-1.0"/>
@@ -52,17 +62,21 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="gobject-2.0"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="glib-2.0"/>
 								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.385180399" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.686289051" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1105241588" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1359986357" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.787711421" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1682727287" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.base.360581653" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.706697777" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
@@ -104,11 +118,15 @@
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/battery-applet"/>
+			<resource resourceType="PROJECT" workspacePath="/mac-battery-applet"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.2112378282;cdt.managedbuild.toolchain.gnu.base.2112378282.540783476;cdt.managedbuild.tool.gnu.c.compiler.base.1628550982;cdt.managedbuild.tool.gnu.c.compiler.input.1097786356">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.2112378282;cdt.managedbuild.toolchain.gnu.base.2112378282.540783476;cdt.managedbuild.tool.gnu.c.compiler.base.856858844;cdt.managedbuild.tool.gnu.c.compiler.input.1892928242">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>

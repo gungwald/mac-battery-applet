@@ -1,0 +1,12 @@
+mac-battery-applet
+Bill Chatfield <bill_chatfield@yahoo.com>
+
+Because the Power PC Mac has a different type of power unit, the normal battery
+applets for Intel hardware do not work. There was an emulator but it is 
+non-functional.
+
+I wanted to provide a .deb package. But after reading all the documentation,
+rules, commands, processes and procedures associated with doing this, I no
+longer have a desire to do it. My goal instead is to make this easy to
+compile and install with a simple Makefile. Maybe someone else will suffer
+through the process of creating a Debian package.

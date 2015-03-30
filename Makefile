@@ -4,7 +4,7 @@
 # It apparently needs adjusted for different machine architectures.
 PKG_CONFIG_PATH=/usr/lib/powerpc-linux-gnu/pkgconfig:/usr/share/pkgconfig
 
-APP=battery-applet
+APP=mac-battery-applet
 OBJS=main.o mac-powerpc-pmu.o
 CFLAGS=-g -O2 `pkg-config --cflags gtk+-3.0`
 LDFLAGS=`pkg-config --libs gtk+-3.0`
@@ -21,3 +21,7 @@ mac-powerpc-pmu.o: mac-powerpc-pmu.c mac-powerpc-pmu.h
 
 clean:
 	rm -rf $(OBJS) $(APP)
+
+install:
+	install -s $(APP)
+	install 
