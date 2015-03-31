@@ -17,6 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* TODO - Format all files so there are no tabs. */
+/* TODO - Move TODOs to Mylin. */
 /* TODO - Add drop-down menu. */
 /* TODO - Add link to power setup to drop-down menu. */
 /* TODO - Add a special icon/animation for the plug-in event. */
