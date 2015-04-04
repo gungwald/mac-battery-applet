@@ -29,26 +29,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include "strings.h"
+#include "files.h"
 #include "mac-powerpc-pmu.h"
 
 /* Constants */
-#define MAX_STR_LEN 255
 #define UPDATE_INTERVAL_MILLISECONDS 5000
-/* FIXME - Icon directory needs to be configurable. Maybe Gnome has a standard
- way of retrieving data files. */
-#define BATTERY_ICON_DIR "/home/bill/share/icons/battery"
 
 /* Macros */
-/* Calling strlen, letting it step through a possibly long string,
- and then comparing the result to 0 would take unnecessarily long.
- Checking the first character for a null byte is very fast. */
-#define IS_EMPTY(s) (s[0]=='\0')
 
 /* Prototypes for private functions */
 gboolean update_icon(gpointer data);
@@ -58,12 +49,13 @@ char *build_tooltip(pmu_info_t *i, pmu_battery_status_t *battery);
 char *find_data_dir();
 char *find_icon_themes_dir();
 char *find_icon_theme_dir(const char *name);
-bool file_exists(const char *name);
-const char *last_name(const char *path);
+bool set_icon_theme(const char *name);
 
 /* Globulars */
 const char *program_name = NULL;
-char *prefix_dir_search_list[] = { "/usr/local", "/opt", "/usr", NULL };
+const char *prefix_dir_search_list[] = { "/usr/local", "/opt", "/usr", NULL };
+char *icon_theme_dir = NULL;
+bool debug = false;
 
 int main(int argc, char *argv[])
 {
@@ -76,7 +68,8 @@ int main(int argc, char *argv[])
 #endif
 
     /* Set our program name */
-    program_name = last_name(argv[0]);
+    program_name = get_short_name(argv[0]);
+    set_icon_theme("default");
 
     gtk_init(&argc, &argv);
     battery_indicator = gtk_status_icon_new();
@@ -94,8 +87,11 @@ int main(int argc, char *argv[])
 
 char *build_missing_battery_icon_file_name()
 {
-    static char file_name[MAX_STR_LEN + 1];
-    snprintf(file_name, MAX_STR_LEN + 1, "%s/battery-missing.xpm", BATTERY_ICON_DIR);
+    static char file_name[STR_CAPACITY];
+    char *icon_dir;
+
+    icon_dir = find_icon_theme_dir("default");
+    snprintf(file_name, STR_CAPACITY, "%s/battery-missing.xpm", icon_dir);
     return file_name;
 }
 
@@ -115,34 +111,38 @@ gboolean update_icon(gpointer data)
 
 char *build_tooltip(pmu_info_t *battery_info, pmu_battery_status_t *battery_status)
 {
-    static char tooltip[MAX_STR_LEN + 1];
-    static char debug_tooltip[MAX_STR_LEN + 1];
+    static char tooltip[STR_CAPACITY];
+    static char debug_tooltip[STR_CAPACITY];
     short int charge_percent;
     short int remaining_minutes;
-    char formatted_info[MAX_STR_LEN + 1];
-    char formatted_status[MAX_STR_LEN + 1];
+    char formatted_info[STR_CAPACITY];
+    char formatted_status[STR_CAPACITY];
 
     charge_percent = calc_pmu_battery_charge_percent(battery_status);
     remaining_minutes = calc_pmu_battery_remaining_minutes(battery_status);
     if (is_pmu_battery_plugged_in_and_fully_charged(battery_info, battery_status)) {
-        snprintf(tooltip, MAX_STR_LEN + 1, "Power at %d%%.\nFully charged.", charge_percent);
+        snprintf(tooltip, STR_CAPACITY, "Power at %d%%.\nFully charged.", charge_percent);
     }
     else if (is_pmu_battery_charging(battery_status)) {
-        snprintf(tooltip, MAX_STR_LEN + 1, "Power at %d%% and charging.\n%d minutes remaining until fully charged.", charge_percent, remaining_minutes);
+        snprintf(tooltip, STR_CAPACITY, "Power at %d%% and charging.\n%d minutes remaining until fully charged.", charge_percent, remaining_minutes);
     }
     else {
-        snprintf(tooltip, MAX_STR_LEN + 1, "Power at %d%% and draining.\n%d minutes remaining until completely empty.", charge_percent, remaining_minutes);
+        snprintf(tooltip, STR_CAPACITY, "Power at %d%% and draining.\n%d minutes remaining until completely empty.", charge_percent, remaining_minutes);
     }
-    snprintf(debug_tooltip, MAX_STR_LEN + 1, "%s\n%s\n%s", tooltip, format_pmu_info(battery_info, formatted_info, MAX_STR_LEN + 1), format_pmu_battery_status(battery_status, formatted_status, MAX_STR_LEN + 1));
-    return debug_tooltip;
+    if (debug) {
+        snprintf(debug_tooltip, STR_CAPACITY, "%s\n%s\n%s", tooltip, format_pmu_info(battery_info, formatted_info, STR_CAPACITY), format_pmu_battery_status(battery_status, formatted_status, STR_CAPACITY));
+        return debug_tooltip;
+    }
+    return tooltip;
 }
 
 char *build_icon_file_name(pmu_battery_status_t *battery)
 {
-    static char path[MAX_STR_LEN + 1];
+    static char path[STR_CAPACITY];
     char *file_name;
     int charge_percent;
     char *charging = "";
+    char *icon_dir;
 
     charge_percent = calc_pmu_battery_charge_percent(battery);
 
@@ -184,68 +184,76 @@ char *build_icon_file_name(pmu_battery_status_t *battery)
     if (is_pmu_battery_charging(battery)) {
         charging = "-charging";
     }
-    snprintf(path, MAX_STR_LEN+1, "%s/%s%s.xpm", BATTERY_ICON_DIR, file_name, charging);
+    icon_dir = find_icon_theme_dir("default");
+    snprintf(path, STR_CAPACITY, "%s/%s%s.xpm", icon_dir, file_name, charging);
     return path;
 }
 
-bool file_exists(const char *name)
-{
-    struct stat file_info;
-    return stat(name, &file_info) == 0 || errno != ENOENT;
-}
-
+/**
+ * Searches all the usual suspects for a data directory matching the program
+ * name.
+ * <p>
+ * Returns the data directory found as a pointer to a static string or exits
+ * with an error if no directory was found.
+ */
 char *find_data_dir()
 {
     /* Initialize data_dir to an empty string. */
-    static char data_dir[MAX_STR_LEN + 1] = { '\0' };
-    int i;
+    static char data_dir[STR_CAPACITY] = { '\0' };
 
-    if (IS_EMPTY(data_dir)) {
-        for (i = 0; prefix_dir_search_list[i] != NULL; i++) {
-            snprintf(data_dir, MAX_STR_LEN+1, "%s/share/%s", prefix_dir_search_list[i], program_name);
-            if (file_exists(data_dir)) {
-                break;
-            }
+    if (IS_EMPTY_STRING(data_dir)) {
+        if (! find_dir(prefix_dir_search_list, "share/mac-battery-applet", data_dir, STR_CAPACITY)) {
+            fprintf(stderr, "%s: data directory was not found\n", program_name);
+            exit(EXIT_FAILURE);
         }
-    }
-    if (IS_EMPTY(data_dir)) {
-        fprintf(stderr, "%s: data directory was not found\n", program_name);
-        exit(EXIT_FAILURE);
     }
     return data_dir;
 }
 
+/**
+ * Looks for a directory named 'icon-themes' inside the data directory
+ * and exits with an error if it is not found.
+ */
 char *find_icon_themes_dir()
 {
-    static char themes_dir[MAX_STR_LEN + 1];
+    static char themes_dir[STR_CAPACITY];
+    char *data_dir;
+
+    data_dir = find_data_dir();
+    snprintf(themes_dir, STR_CAPACITY, "%s/icon-themes", data_dir);
+    if (! file_exists(themes_dir)) {
+        fprintf(stderr, "%s: icon themes directory was not found in %s\n", program_name, data_dir);
+        exit(EXIT_FAILURE);
+    }
     return themes_dir;
 }
 
+/**
+ * Looks for the directory by the given name inside the icon themes directory
+ * as returned by find_icon_themes_dir. Returns an empty string if it is not
+ * found.
+ */
 char *find_icon_theme_dir(const char *name)
 {
-    return NULL;
+    static char theme_dir[STR_CAPACITY];
+    char *themes_dir;
+
+    themes_dir = find_icon_themes_dir();
+    snprintf(theme_dir, STR_CAPACITY, "%s/%s", themes_dir, name);
+    if (! file_exists(theme_dir)) {
+        CLEAR_STRING(theme_dir);
+    }
+    return theme_dir;
 }
 
-/**
- * Gets the last component of a path. It returns an empty string if path
- * ends with '/'.
- */
-const char *last_name(const char *path)
+bool set_icon_theme(const char *name)
 {
-    const char *p;
+    char *theme_dir;
 
-    p = path + strlen(path) - 1;
-    if (*p == '/') {
-        p = "";
+    theme_dir = find_icon_theme_dir(name);
+    if (CONTAINS_A_VALUE(theme_dir)) {
+        icon_theme_dir = theme_dir;
+        return true;
     }
-    else {
-        p--;
-        while (*p != '/' && p > path) {
-            p--;
-        }
-        if (*p != '/') {
-            p = path;
-        }
-    }
-    return p;
+    return false;
 }
