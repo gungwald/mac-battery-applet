@@ -5,7 +5,7 @@ LICENSE: GPL 3.0
 
 DESCRIPTION
 
-The is a Linux PowerPC app for the Gnome 3 desktop which displays the
+This is a Linux PowerPC app for the Gnome 3 desktop which displays the
 battery status in an icon on the top panel. It was developed and tested on
 Debian Wheezy 7.8. It should work on any PowerPC-based Mac running Linux and 
 Gnome 3. It probably won't work on BSD because it reads the battery info
